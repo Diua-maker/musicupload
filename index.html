@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIUA Music - Upload</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary-color: #5D5CDE;
+            --primary-hover: #4a49b7;
+            --background-dark: #181818;
+            --background-darker: #121212;
+            --background-lighter: #282828;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --text-tertiary: #686868;
+            --button-hover: rgba(255, 255, 255, 0.1);
+            --card-background: #232323;
+            --border-color: #333333;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .auth-form {
+            background-color: var(--card-background);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .upload-form {
+            background-color: var(--card-background);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--background-lighter);
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: block;
+            cursor: pointer;
+            background-color: var(--background-lighter);
+            border: 2px dashed var(--border-color);
+            border-radius: 5px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-wrapper:hover {
+            border-color: var(--primary-color);
+            background-color: var(--background-darker);
+        }
+
+        .file-input-wrapper.dragover {
+            border-color: var(--primary-color);
+            background-color: var(--background-darker);
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-input-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .file-input-text {
+            color: var(--text-secondary);
+        }
+
+        .file-selected {
+            background-color: var(--primary-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--text-primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background-color: var(--text-tertiary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background-color: var(--background-lighter);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--background-darker);
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.2);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .alert-error {
+            background-color: rgba(220, 53, 69, 0.2);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            border: 1px solid var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: var(--background-lighter);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .upload-queue {
+            background-color: var(--background-lighter);
+            border-radius: 5px;
+            padding: 1rem;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .upload-item {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .upload-item:last-child {
+            border-bottom: none;
+        }
+
+        .upload-item-info {
+            flex: 1;
+        }
+
+        .upload-item-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .upload-item-status {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--error-color);
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .logout-btn {
+                position: static;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="btn logout-btn hidden" id="logoutBtn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-music"></i>
+                DIUA Music Upload
+            </div>
+            <div class="subtitle">Sistema de upload de músicas</div>
+        </div>
+
+        <!-- Authentication Form -->
+        <div class="auth-form" id="authForm">
+            <h2 style="margin-bottom: 1.5rem; text-align: center;">
+                <i class="fas fa-lock"></i> Autenticação
+            </h2>
+            
+            <div id="authMessage"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="username">Username</label>
+                    <input type="text" id="username" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="accessKey">Chave de Acesso (5 dígitos)</label>
+                    <input type="text" id="accessKey" class="form-input" maxlength="5" pattern="[A-Za-z0-9]{5}" required>
+                </div>
+                
+                <button type="submit" class="btn btn-full">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+            </form>
+        </div>
+
+        <!-- Upload Form -->
+        <div class="upload-form" id="uploadForm">
+            <h2 style="margin-bottom: 1.5rem;">
+                <i class="fas fa-upload"></i> Upload de Música
+            </h2>
+            
+            <div id="uploadMessage"></div>
+            
+            <form id="musicForm">
+                <div class="form-group">
+                    <label class="form-label" for="titulo">Título da Música *</label>
+                    <input type="text" id="titulo" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="artista">Artista *</label>
+                    <input type="text" id="artista" class="form-input" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="album">Álbum</label>
+                        <input type="text" id="album" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="ano">Ano</label>
+                        <input type="number" id="ano" class="form-input" min="1900" max="2030">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="genero">Gênero *</label>
+                        <select id="genero" class="form-select" required>
+                            <option value="">Selecione um gênero</option>
+                            <option value="kizomba">Kizomba</option>
+                            <option value="rap">Rap</option>
+                            <option value="trap">Trap</option>
+                            <option value="gospel">Gospel</option>
+                            <option value="pop">Pop</option>
+                            <option value="rock">Rock</option>
+                            <option value="funk">Funk</option>
+                            <option value="eletronica">Eletrônica</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="duracao">Duração (segundos)</label>
+                        <input type="number" id="duracao" class="form-input" min="1">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="descricao">Descrição</label>
+                    <textarea id="descricao" class="form-textarea" placeholder="Descrição da música (opcional)"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Arquivo de Áudio *</label>
+                    <div class="file-input-wrapper" id="audioWrapper">
+                        <input type="file" id="audioFile" class="file-input" accept="audio/*" required>
+                        <div class="file-input-content">
+                            <i class="fas fa-music file-input-icon"></i>
+                            <div class="file-input-text">Clique ou arraste o arquivo de áudio aqui</div>
+                            <div class="file-input-text" style="font-size: 0.9rem;">MP3, WAV, OGG (Máx: 50MB)</div>
+                        </div>
+                    </div>
+                    <div id="audioSelected"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Capa do Álbum</label>
+                    <div class="file-input-wrapper" id="imageWrapper">
+                        <input type="file" id="imageFile" class="file-input" accept="image/*">
+                        <div class="file-input-content">
+                            <i class="fas fa-image file-input-icon"></i>
+                            <div class="file-input-text">Clique ou arraste a imagem da capa aqui</div>
+                            <div class="file-input-text" style="font-size: 0.9rem;">JPG, PNG, GIF (Máx: 10MB)</div>
+                        </div>
+                    </div>
+                    <div id="imageSelected"></div>
+                </div>
+                
+                <div class="progress-bar" id="progressBar" style="display: none;">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-full" id="submitBtn">
+                        <i class="fas fa-upload"></i> Fazer Upload
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                        <i class="fas fa-redo"></i> Limpar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="upload-queue" id="uploadQueue">
+            <h3 style="margin-bottom: 1rem;">
+                <i class="fas fa-list"></i> Fila de Upload
+            </h3>
+            <div id="uploadItems"></div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase configuration
+        const supabaseUrl = 'https://zrpyooblfhxjrxovxren.supabase.co'; // Substitua pela sua URL do Supabase
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpycHlvb2JsZmh4anJ4b3Z4cmVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3NTI4NjcsImV4cCI6MjA2NDMyODg2N30.WpGn7dyVqIsUOMfvVkKWNBTu-ECIUmqgwPe94ye_kV8'; // Substitua pela sua chave pública do Supabase
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Authentication credentials (In production, store this securely)
+        const AUTH_CREDENTIALS = {
+            'admin': 'A1B2C',
+            'uploader': 'X9Y8Z',
+            'manager': 'M5N6P'
+        };
+
+        // DOM Elements
+        const authForm = document.getElementById('authForm');
+        const uploadForm = document.getElementById('uploadForm');
+        const loginForm = document.getElementById('loginForm');
+        const musicForm = document.getElementById('musicForm');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const authMessage = document.getElementById('authMessage');
+        const uploadMessage = document.getElementById('uploadMessage');
+        const audioFile = document.getElementById('audioFile');
+        const imageFile = document.getElementById('imageFile');
+        const audioWrapper = document.getElementById('audioWrapper');
+        const imageWrapper = document.getElementById('imageWrapper');
+        const audioSelected = document.getElementById('audioSelected');
+        const imageSelected = document.getElementById('imageSelected');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const submitBtn = document.getElementById('submitBtn');
+        const uploadQueue = document.getElementById('uploadQueue');
+
+        // Global variables
+        let isAuthenticated = false;
+        let currentUser = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already authenticated
+            checkAuthentication();
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+
+        // Check authentication status
+        function checkAuthentication() {
+            const authData = localStorage.getItem('diua_auth');
+            if (authData) {
+                try {
+                    const { username, key, timestamp } = JSON.parse(authData);
+                    
+                    // Check if authentication is still valid (24 hours)
+                    const now = new Date().getTime();
+                    const authTime = new Date(timestamp).getTime();
+                    const hoursPassed = (now - authTime) / (1000 * 60 * 60);
+                    
+                    if (hoursPassed < 24 && AUTH_CREDENTIALS[username] === key) {
+                        isAuthenticated = true;
+                        currentUser = username;
+                        showUploadForm();
+                    } else {
+                        localStorage.removeItem('diua_auth');
+                    }
+                } catch (error) {
+                    localStorage.removeItem('diua_auth');
+                }
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Login form
+            loginForm.addEventListener('submit', handleLogin);
+            
+            // Music upload form
+            musicForm.addEventListener('submit', handleMusicUpload);
+            
+            // File input changes
+            audioFile.addEventListener('change', handleAudioFileChange);
+            imageFile.addEventListener('change', handleImageFileChange);
+            
+            // Drag and drop for audio
+            setupDragAndDrop(audioWrapper, audioFile, 'audio');
+            setupDragAndDrop(imageWrapper, imageFile, 'image');
+        }
+
+        // Handle login
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const accessKey = document.getElementById('accessKey').value.trim().toUpperCase();
+            
+            // Clear previous messages
+            authMessage.innerHTML = '';
+            
+            if (!username || !accessKey) {
+                showAuthMessage('Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+            
+            if (accessKey.length !== 5) {
+                showAuthMessage('A chave de acesso deve ter exatamente 5 dígitos.', 'error');
+                return;
+            }
+            
+            // Check credentials
+            if (AUTH_CREDENTIALS[username] === accessKey) {
+                // Store authentication
+                const authData = {
+                    username: username,
+                    key: accessKey,
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('diua_auth', JSON.stringify(authData));
+                
+                isAuthenticated = true;
+                currentUser = username;
+                
+                showAuthMessage('Login realizado com sucesso!', 'success');
+                
+                setTimeout(() => {
+                    showUploadForm();
+                }, 1000);
+            } else {
+                showAuthMessage('Credenciais inválidas. Verifique o username e a chave de acesso.', 'error');
+            }
+        }
+
+        // Show upload form
+        function showUploadForm() {
+            authForm.classList.add('hidden');
+            uploadForm.classList.remove('hidden');
+            logoutBtn.classList.remove('hidden');
+        }
+
+        // Handle logout
+        function logout() {
+            localStorage.removeItem('diua_auth');
+            isAuthenticated = false;
+            currentUser = null;
+            
+            uploadForm.classList.add('hidden');
+            logoutBtn.classList.add('hidden');
+            authForm.classList.remove('hidden');
+            
+            // Reset forms
+            loginForm.reset();
+            resetForm();
+            
+            showAuthMessage('Logout realizado com sucesso.', 'success');
+        }
+
+        // Handle music upload
+        async function handleMusicUpload(e) {
+            e.preventDefault();
+            
+            if (!isAuthenticated) {
+                showUploadMessage('Não autenticado. Faça login novamente.', 'error');
+                return;
+            }
+            
+            // Clear previous messages
+            uploadMessage.innerHTML = '';
+            
+            // Get form data
+            const titulo = document.getElementById('titulo').value.trim();
+            const artista = document.getElementById('artista').value.trim();
+            const album = document.getElementById('album').value.trim();
+            const ano = document.getElementById('ano').value;
+            const genero = document.getElementById('genero').value;
+            const duracao = document.getElementById('duracao').value;
+            const descricao = document.getElementById('descricao').value.trim();
+            
+            // Validate required fields
+            if (!titulo || !artista || !genero || !audioFile.files[0]) {
+                showUploadMessage('Por favor, preencha todos os campos obrigatórios e selecione um arquivo de áudio.', 'error');
+                return;
+            }
+            
+            // Validate file sizes
+            const audioFileSize = audioFile.files[0].size / (1024 * 1024); // MB
+            if (audioFileSize > 50) {
+                showUploadMessage('O arquivo de áudio não pode ser maior que 50MB.', 'error');
+                return;
+            }
+            
+            if (imageFile.files[0]) {
+                const imageFileSize = imageFile.files[0].size / (1024 * 1024); // MB
+                if (imageFileSize > 10) {
+                    showUploadMessage('A imagem da capa não pode ser maior que 10MB.', 'error');
+                    return;
+                }
+            }
+            
+            try {
+                // Disable submit button and show progress
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<div class="loading"><div class="spinner"></div> Enviando...</div>';
+                progressBar.style.display = 'block';
+                
+                // Upload audio file
+                showUploadMessage('Enviando arquivo de áudio...', 'warning');
+                const audioFileName = `audio_${Date.now()}_${audioFile.files[0].name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+                
+                const { data: audioData, error: audioError } = await supabase.storage
+                    .from('musicas')
+                    .upload(audioFileName, audioFile.files[0], {
+                        onUploadProgress: (progress) => {
+                            const percent = (progress.loaded / progress.total) * 50; // 50% for audio
+                            progressFill.style.width = `${percent}%`;
+                        }
+                    });
+                
+                if (audioError) throw audioError;
+                
+                // Get audio URL
+                const { data: audioUrlData } = supabase.storage
+                    .from('musicas')
+                    .getPublicUrl(audioFileName);
+                
+                let imageUrl = null;
+                
+                // Upload image if provided
+                if (imageFile.files[0]) {
+                    showUploadMessage('Enviando imagem da capa...', 'warning');
+                    const imageFileName = `capa_${Date.now()}_${imageFile.files[0].name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+                    
+                    const { data: imageData, error: imageError } = await supabase.storage
+                        .from('capas')
+                        .upload(imageFileName, imageFile.files[0], {
+                            onUploadProgress: (progress) => {
+                                const percent = 50 + (progress.loaded / progress.total) * 30; // 30% for image
+                                progressFill.style.width = `${percent}%`;
+                            }
+                        });
+                    
+                    if (imageError) throw imageError;
+                    
+                    // Get image URL
+                    const { data: imageUrlData } = supabase.storage
+                        .from('capas')
+                        .getPublicUrl(imageFileName);
+                    
+                    imageUrl = imageUrlData.publicUrl;
+                }
+                
+                // Save music data to database
+                showUploadMessage('Salvando dados da música...', 'warning');
+                progressFill.style.width = '90%';
+                
+                const musicData = {
+                    titulo: titulo,
+                    artista: artista,
+                    album: album || null,
+                    ano: ano ? parseInt(ano) : null,
+                    genero: genero,
+                    duracao: duracao ? parseInt(duracao) : null,
+                    descricao: descricao || null,
+                    audio_url: audioUrlData.publicUrl,
+                    capa_url: imageUrl,
+                    uploader: currentUser,
+                    created_at: new Date().toISOString()
+                };
+                
+                const { data: dbData, error: dbError } = await supabase
+                    .from('musicas')
+                    .insert([musicData]);
+                
+                if (dbError) throw dbError;
+                
+                // Update artist if not exists
+                const { data: artistData, error: artistError } = await supabase
+                    .from('artistas')
+                    .upsert([{
+                        nome: artista,
+                        genero: genero,
+                        imagem_url: imageUrl
+                    }], { onConflict: 'nome' });
+                
+                // Update album if provided
+                if (album) {
+                    const { data: albumData, error: albumError } = await supabase
+                        .from('albuns')
+                        .upsert([{
+                            titulo: album,
+                            artista: artista,
+                            ano: ano ? parseInt(ano) : null,
+                            capa_url: imageUrl,
+                            num_faixas: 1 // This would need to be calculated properly
+                        }], { onConflict: 'titulo,artista' });
+                }
+                
+                // Complete
+                progressFill.style.width = '100%';
+                showUploadMessage('Música enviada com sucesso!', 'success');
+                
+                // Reset form
+                setTimeout(() => {
+                    resetForm();
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Erro no upload:', error);
+                showUploadMessage(`Erro no upload: ${error.message}`, 'error');
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-upload"></i> Fazer Upload';
+                
+                // Hide progress bar after a delay
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                    progressFill.style.width = '0%';
+                }, 3000);
+            }
+        }
+
+        // Handle audio file change
+        function handleAudioFileChange() {
+            const file = audioFile.files[0];
+            if (file) {
+                audioSelected.innerHTML = `
+                    <div class="file-selected">
+                        <i class="fas fa-music"></i>
+                        ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)
+                    </div>
+                `;
+                
+                // Try to get audio duration
+                const audio = new Audio();
+                audio.onloadedmetadata = function() {
+                    const duration = Math.floor(audio.duration);
+                    document.getElementById('duracao').value = duration;
+                };
+                audio.src = URL.createObjectURL(file);
+            } else {
+                audioSelected.innerHTML = '';
+            }
+        }
+
+        // Handle image file change
+        function handleImageFileChange() {
+            const file = imageFile.files[0];
+            if (file) {
+                imageSelected.innerHTML = `
+                    <div class="file-selected">
+                        <i class="fas fa-image"></i>
+                        ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)
+                    </div>
+                `;
+            } else {
+                imageSelected.innerHTML = '';
+            }
+        }
+
+        // Setup drag and drop
+        function setupDragAndDrop(wrapper, input, type) {
+            wrapper.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                wrapper.classList.add('dragover');
+            });
+            
+            wrapper.addEventListener('dragleave', () => {
+                wrapper.classList.remove('dragover');
+            });
+            
+            wrapper.addEventListener('drop', (e) => {
+                e.preventDefault();
+                wrapper.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    // Validate file type
+                    const file = files[0];
+                    const isValidType = type === 'audio' ? 
+                        file.type.startsWith('audio/') : 
+                        file.type.startsWith('image/');
+                    
+                    if (isValidType) {
+                        input.files = files;
+                        if (type === 'audio') {
+                            handleAudioFileChange();
+                        } else {
+                            handleImageFileChange();
+                        }
+                    } else {
+                        showUploadMessage(`Por favor, selecione um arquivo de ${type === 'audio' ? 'áudio' : 'imagem'} válido.`, 'error');
+                    }
+                }
+            });
+        }
+
+        // Reset form
+        function resetForm() {
+            musicForm.reset();
+            audioSelected.innerHTML = '';
+            imageSelected.innerHTML = '';
+            uploadMessage.innerHTML = '';
+            progressBar.style.display = 'none';
+            progressFill.style.width = '0%';
+        }
+
+        // Show authentication message
+        function showAuthMessage(message, type) {
+            const alertClass = `alert-${type}`;
+            const icon = type === 'success' ? 'fas fa-check-circle' : 
+                        type === 'error' ? 'fas fa-exclamation-circle' : 
+                        'fas fa-info-circle';
+            
+            authMessage.innerHTML = `
+                <div class="alert ${alertClass}">
+                    <i class="${icon}"></i>
+                    ${message}
+                </div>
+            `;
+        }
+
+        // Show upload message
+        function showUploadMessage(message, type) {
+            const alertClass = `alert-${type}`;
+            const icon = type === 'success' ? 'fas fa-check-circle' : 
+                        type === 'error' ? 'fas fa-exclamation-circle' : 
+                        'fas fa-info-circle';
+            
+            uploadMessage.innerHTML = `
+                <div class="alert ${alertClass}">
+                    <i class="${icon}"></i>
+                    ${message}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
