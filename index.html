@@ -44,6 +44,7 @@
             width: 100%;
             max-width: 800px;
             padding: 2rem;
+            position: relative;
         }
 
         .header {
@@ -297,9 +298,11 @@
 
         .logout-btn {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
+            top: -1rem;
+            right: 0;
             background-color: var(--error-color);
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
         }
 
         .logout-btn:hover {
@@ -318,6 +321,7 @@
             .logout-btn {
                 position: static;
                 margin-bottom: 1rem;
+                align-self: flex-end;
             }
         }
 
@@ -495,9 +499,22 @@
     </div>
 
     <script>
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
         // Supabase configuration
-        const supabaseUrl = 'https://zrpyooblfhxjrxovxren.supabase.co'; // Substitua pela sua URL do Supabase
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpycHlvb2JsZmh4anJ4b3Z4cmVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3NTI4NjcsImV4cCI6MjA2NDMyODg2N30.WpGn7dyVqIsUOMfvVkKWNBTu-ECIUmqgwPe94ye_kV8'; // Substitua pela sua chave pública do Supabase
+        const supabaseUrl = 'https://aejenqzfjqoerwmkejup.supabase.co'; // Substitua pela sua URL do Supabase
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlamVucXpmanFvZXJ3bWtlanVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3ODc1NjksImV4cCI6MjA2NDM2MzU2OX0.w0Ouv3Io6EIutqluv1i9AFHa3_sOuYwHxabAL6f6Q1U'; // Substitua pela sua chave pública do Supabase
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // Authentication credentials (In production, store this securely)
@@ -557,11 +574,22 @@
                         showUploadForm();
                     } else {
                         localStorage.removeItem('diua_auth');
+                        showAuthForm();
                     }
                 } catch (error) {
                     localStorage.removeItem('diua_auth');
+                    showAuthForm();
                 }
+            } else {
+                showAuthForm();
             }
+        }
+
+        // Show authentication form
+        function showAuthForm() {
+            authForm.classList.remove('hidden');
+            uploadForm.classList.add('hidden');
+            logoutBtn.classList.add('hidden');
         }
 
         // Setup event listeners
@@ -628,6 +656,7 @@
         function showUploadForm() {
             authForm.classList.add('hidden');
             uploadForm.classList.remove('hidden');
+            uploadForm.style.display = 'block';
             logoutBtn.classList.remove('hidden');
         }
 
@@ -638,6 +667,7 @@
             currentUser = null;
             
             uploadForm.classList.add('hidden');
+            uploadForm.style.display = 'none';
             logoutBtn.classList.add('hidden');
             authForm.classList.remove('hidden');
             
