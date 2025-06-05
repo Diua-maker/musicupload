@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIUA Music - Centro de Upload</title>
+    <title>DIUA Music - Upload</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -22,7 +22,6 @@
             --success-color: #28a745;
             --error-color: #dc3545;
             --warning-color: #ffc107;
-            --youtube-color: #FF0000;
         }
 
         * {
@@ -43,7 +42,7 @@
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 800px;
             padding: 2rem;
             position: relative;
         }
@@ -77,66 +76,12 @@
             margin-bottom: 2rem;
         }
 
-        .upload-container {
+        .upload-form {
             background-color: var(--card-background);
+            padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
             display: none;
-        }
-
-        .upload-tabs {
-            display: flex;
-            background-color: var(--background-darker);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .upload-tab {
-            flex: 1;
-            padding: 1rem 1.5rem;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            position: relative;
-        }
-
-        .upload-tab:hover {
-            color: var(--text-primary);
-            background-color: var(--button-hover);
-        }
-
-        .upload-tab.active {
-            color: var(--primary-color);
-            background-color: var(--card-background);
-        }
-
-        .upload-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background-color: var(--primary-color);
-        }
-
-        .upload-content {
-            padding: 2rem;
-        }
-
-        .upload-page {
-            display: none;
-        }
-
-        .upload-page.active {
-            display: block;
         }
 
         .form-group {
@@ -228,162 +173,6 @@
             gap: 0.5rem;
         }
 
-        .url-input-container {
-            position: relative;
-        }
-
-        .platform-indicator {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            color: white;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .platform-indicator.visible {
-            opacity: 1;
-        }
-
-        .platform-indicator.youtube {
-            background-color: var(--youtube-color);
-        }
-
-        .url-preview {
-            background-color: var(--background-darker);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1rem;
-            display: none;
-        }
-
-        .url-preview.visible {
-            display: block;
-        }
-
-        .preview-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .preview-platform {
-            padding: 0.25rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .preview-platform.youtube {
-            background-color: var(--youtube-color);
-        }
-
-        .preview-url {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            word-break: break-all;
-        }
-
-        .video-type-selector {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background-color: var(--background-darker);
-            border-radius: 8px;
-        }
-
-        .video-type-option {
-            flex: 1;
-            padding: 1rem;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s ease;
-            background-color: var(--background-lighter);
-        }
-
-        .video-type-option:hover {
-            border-color: var(--primary-color);
-        }
-
-        .video-type-option.active {
-            border-color: var(--primary-color);
-            background-color: rgba(93, 92, 222, 0.1);
-        }
-
-        .video-type-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-
-        .video-type-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .video-type-description {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .platform-examples {
-            background-color: var(--background-darker);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-
-        .platform-examples h4 {
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .example-url {
-            font-family: monospace;
-            background-color: var(--background-lighter);
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.25rem;
-            word-break: break-all;
-        }
-
-        .platform-icons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .platform-icon {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            color: white;
-        }
-
-        .platform-icon.youtube {
-            background-color: var(--youtube-color);
-        }
-
         .btn {
             background-color: var(--primary-color);
             color: var(--text-primary);
@@ -419,32 +208,9 @@
             background-color: var(--background-darker);
         }
 
-        .btn-danger {
-            background-color: var(--error-color);
-            color: var(--text-primary);
-        }
-
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-
-        .btn-warning {
-            background-color: var(--warning-color);
-            color: var(--background-dark);
-        }
-
-        .btn-warning:hover {
-            background-color: #e0a800;
-        }
-
         .btn-full {
             width: 100%;
             justify-content: center;
-        }
-
-        .btn-small {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
         }
 
         .alert {
@@ -496,6 +262,40 @@
             transition: width 0.3s ease;
         }
 
+        .upload-queue {
+            background-color: var(--background-lighter);
+            border-radius: 5px;
+            padding: 1rem;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .upload-item {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .upload-item:last-child {
+            border-bottom: none;
+        }
+
+        .upload-item-info {
+            flex: 1;
+        }
+
+        .upload-item-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .upload-item-status {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
         .logout-btn {
             position: absolute;
             top: -1rem;
@@ -509,161 +309,18 @@
             background-color: #c82333;
         }
 
-        .content-list {
-            margin-top: 2rem;
-        }
-
-        .content-item {
-            background-color: var(--background-lighter);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .content-thumbnail {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-
-        .content-info {
-            flex: 1;
-        }
-
-        .content-title {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .content-artist {
-            color: var(--primary-color);
-            margin-bottom: 0.25rem;
-        }
-
-        .content-details {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .content-actions {
-            display: flex;
-            gap: 0.5rem;
-            flex-shrink: 0;
-        }
-
-        .search-section {
-            margin-bottom: 2rem;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            background-color: var(--background-lighter);
-            color: var(--text-primary);
-            font-size: 16px;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border-color);
-            background-color: var(--background-lighter);
-            color: var(--text-primary);
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn.active {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background-color: var(--background-lighter);
+        .youtube-preview {
+            margin-top: 0.5rem;
             padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .modal {
+            background-color: var(--background-darker);
+            border-radius: 5px;
             display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
+        }
+
+        .youtube-preview iframe {
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: var(--card-background);
-            padding: 2rem;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            cursor: pointer;
+            height: 200px;
+            border-radius: 5px;
         }
 
         @media screen and (max-width: 768px) {
@@ -681,43 +338,8 @@
                 align-self: flex-end;
             }
 
-            .upload-tabs {
-                flex-direction: column;
-            }
-
-            .upload-tab {
-                padding: 0.75rem;
-            }
-
-            .platform-icons {
-                gap: 0.5rem;
-            }
-
-            .platform-icon {
-                width: 30px;
-                height: 30px;
-                font-size: 0.9rem;
-            }
-
-            .stats-container {
-                grid-template-columns: 1fr;
-            }
-
-            .content-item {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .content-actions {
-                justify-content: center;
-            }
-
-            .filter-buttons {
-                justify-content: center;
-            }
-
-            .video-type-selector {
-                flex-direction: column;
+            .youtube-preview iframe {
+                height: 150px;
             }
         }
 
@@ -755,10 +377,10 @@
 
         <div class="header">
             <div class="logo">
-                <i class="fas fa-upload"></i>
-                DIUA Music Centro de Upload
+                <i class="fas fa-music"></i>
+                DIUA Music Upload
             </div>
-            <div class="subtitle">Sistema completo de upload de músicas e videoclipes</div>
+            <div class="subtitle">Sistema de upload de músicas e videoclipes</div>
         </div>
 
         <!-- Authentication Form -->
@@ -786,334 +408,120 @@
             </form>
         </div>
 
-        <!-- Upload Container -->
-        <div class="upload-container" id="uploadContainer">
-            <!-- Navigation Tabs -->
-            <div class="upload-tabs">
-                <button class="upload-tab active" onclick="switchTab('musicas')">
-                    <i class="fas fa-music"></i>
-                    Upload de Músicas
-                </button>
-                <button class="upload-tab" onclick="switchTab('videoclipes')">
-                    <i class="fas fa-video"></i>
-                    Upload de Videoclipes
-                </button>
-                <button class="upload-tab" onclick="switchTab('gerenciar')">
-                    <i class="fas fa-cog"></i>
-                    Gerenciar Conteúdo
-                </button>
-            </div>
-
-            <div class="upload-content">
-                <!-- Music Upload Page -->
-                <div class="upload-page active" id="musicasPage">
-                    <h3 style="margin-bottom: 1.5rem;">
-                        <i class="fas fa-music"></i> Upload de Músicas
-                    </h3>
-                    
-                    <div id="musicasMessage"></div>
-                    
-                    <form id="musicasForm">
-                        <div class="form-group">
-                            <label class="form-label" for="musicTitulo">Título da Música *</label>
-                            <input type="text" id="musicTitulo" class="form-input" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="musicArtista">Artista *</label>
-                            <input type="text" id="musicArtista" class="form-input" required>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="musicAlbum">Álbum</label>
-                                <input type="text" id="musicAlbum" class="form-input">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="musicAno">Ano</label>
-                                <input type="number" id="musicAno" class="form-input" min="1900" max="2030">
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="musicGenero">Gênero *</label>
-                                <select id="musicGenero" class="form-select" required>
-                                    <option value="">Selecione um gênero</option>
-                                    <option value="kizomba">Kizomba</option>
-                                    <option value="rap">Rap</option>
-                                    <option value="trap">Trap</option>
-                                    <option value="gospel">Gospel</option>
-                                    <option value="pop">Pop</option>
-                                    <option value="rock">Rock</option>
-                                    <option value="funk">Funk</option>
-                                    <option value="eletronica">Eletrônica</option>
-                                    <option value="outros">Outros</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="musicDuracao">Duração (segundos)</label>
-                                <input type="number" id="musicDuracao" class="form-input" min="1">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="musicDescricao">Descrição</label>
-                            <textarea id="musicDescricao" class="form-textarea" placeholder="Descrição da música (opcional)"></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Arquivo de Áudio *</label>
-                            <div class="file-input-wrapper" id="audioWrapper">
-                                <input type="file" id="audioFile" class="file-input" accept="audio/*" required>
-                                <div class="file-input-content">
-                                    <i class="fas fa-music file-input-icon"></i>
-                                    <div class="file-input-text">Clique ou arraste o arquivo de áudio aqui</div>
-                                    <div class="file-input-text" style="font-size: 0.9rem;">MP3, WAV, OGG (Máx: 50MB)</div>
-                                </div>
-                            </div>
-                            <div id="audioSelected"></div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Capa do Álbum</label>
-                            <div class="file-input-wrapper" id="imageWrapper">
-                                <input type="file" id="imageFile" class="file-input" accept="image/*">
-                                <div class="file-input-content">
-                                    <i class="fas fa-image file-input-icon"></i>
-                                    <div class="file-input-text">Clique ou arraste a imagem da capa aqui</div>
-                                    <div class="file-input-text" style="font-size: 0.9rem;">JPG, PNG, GIF (Máx: 10MB)</div>
-                                </div>
-                            </div>
-                            <div id="imageSelected"></div>
-                        </div>
-                        
-                        <div class="progress-bar" id="musicProgressBar" style="display: none;">
-                            <div class="progress-fill" id="musicProgressFill"></div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                            <button type="submit" class="btn btn-full" id="musicSubmitBtn">
-                                <i class="fas fa-upload"></i> Fazer Upload
-                            </button>
-                            <button type="button" class="btn btn-secondary" onclick="resetMusicForm()">
-                                <i class="fas fa-redo"></i> Limpar
-                            </button>
-                        </div>
-                    </form>
+        <!-- Upload Form -->
+        <div class="upload-form" id="uploadForm">
+            <h2 style="margin-bottom: 1.5rem;">
+                <i class="fas fa-upload"></i> Upload de Música
+            </h2>
+            
+            <div id="uploadMessage"></div>
+            
+            <form id="musicForm">
+                <div class="form-group">
+                    <label class="form-label" for="titulo">Título da Música *</label>
+                    <input type="text" id="titulo" class="form-input" required>
                 </div>
-
-                <!-- Video Upload Page -->
-                <div class="upload-page" id="videoclipesPage">
-                    <h3 style="margin-bottom: 1rem;">
-                        <i class="fas fa-video"></i> Upload de Videoclipes
-                    </h3>
-
-                    <!-- Video Type Selector -->
-                    <div class="video-type-selector">
-                        <div class="video-type-option active" onclick="selectVideoType('local')">
-                            <div class="video-type-icon"><i class="fas fa-upload"></i></div>
-                            <div class="video-type-title">Upload Local</div>
-                            <div class="video-type-description">Enviar arquivo de vídeo do seu computador</div>
-                        </div>
-                        <div class="video-type-option" onclick="selectVideoType('youtube')">
-                            <div class="video-type-icon"><i class="fab fa-youtube"></i></div>
-                            <div class="video-type-title">YouTube</div>
-                            <div class="video-type-description">Adicionar via URL do YouTube</div>
-                        </div>
-                    </div>
-                    
-                    <div id="videoclipesMessage"></div>
-                    
-                    <form id="videoclipesForm">
-                        <!-- Common fields -->
-                        <div class="form-group">
-                            <label class="form-label" for="videoTitulo">Título do Videoclipe *</label>
-                            <input type="text" id="videoTitulo" class="form-input" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="videoArtista">Artista *</label>
-                            <input type="text" id="videoArtista" class="form-input" required>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="videoAlbum">Álbum</label>
-                                <input type="text" id="videoAlbum" class="form-input">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="videoAno">Ano</label>
-                                <input type="number" id="videoAno" class="form-input" min="1900" max="2030">
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="videoGenero">Gênero *</label>
-                                <select id="videoGenero" class="form-select" required>
-                                    <option value="">Selecione um gênero</option>
-                                    <option value="kizomba">Kizomba</option>
-                                    <option value="rap">Rap</option>
-                                    <option value="trap">Trap</option>
-                                    <option value="gospel">Gospel</option>
-                                    <option value="pop">Pop</option>
-                                    <option value="rock">Rock</option>
-                                    <option value="funk">Funk</option>
-                                    <option value="eletronica">Eletrônica</option>
-                                    <option value="outros">Outros</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="videoDuracao">Duração (segundos)</label>
-                                <input type="number" id="videoDuracao" class="form-input" min="1">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="videoDescricao">Descrição</label>
-                            <textarea id="videoDescricao" class="form-textarea" placeholder="Descrição do videoclipe (opcional)"></textarea>
-                        </div>
-
-                        <!-- Local Video Upload Fields -->
-                        <div id="localVideoFields">
-                            <div class="form-group">
-                                <label class="form-label">Arquivo de Vídeo *</label>
-                                <div class="file-input-wrapper" id="videoWrapper">
-                                    <input type="file" id="videoFile" class="file-input" accept="video/*">
-                                    <div class="file-input-content">
-                                        <i class="fas fa-video file-input-icon"></i>
-                                        <div class="file-input-text">Clique ou arraste o arquivo de vídeo aqui</div>
-                                        <div class="file-input-text" style="font-size: 0.9rem;">MP4, WebM, AVI, MOV (Máx: 500MB)</div>
-                                    </div>
-                                </div>
-                                <div id="videoSelected"></div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Miniatura do Vídeo</label>
-                                <div class="file-input-wrapper" id="thumbnailWrapper">
-                                    <input type="file" id="thumbnailFile" class="file-input" accept="image/*">
-                                    <div class="file-input-content">
-                                        <i class="fas fa-image file-input-icon"></i>
-                                        <div class="file-input-text">Clique ou arraste a miniatura aqui</div>
-                                        <div class="file-input-text" style="font-size: 0.9rem;">JPG, PNG, GIF (Máx: 10MB)</div>
-                                    </div>
-                                </div>
-                                <div id="thumbnailSelected"></div>
-                            </div>
-                        </div>
-
-                        <!-- YouTube URL Fields -->
-                        <div id="youtubeFields" style="display: none;">
-                            <div class="platform-examples">
-                                <h4><i class="fas fa-info-circle"></i> URL do YouTube:</h4>
-                                <div class="example-url">https://www.youtube.com/watch?v=dQw4w9WgXcQ</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="videoUrl">URL do YouTube *</label>
-                                <div class="url-input-container">
-                                    <input type="url" id="videoUrl" class="form-input" placeholder="Cole aqui o link do videoclipe do YouTube" style="padding-left: 3rem;">
-                                    <div class="platform-indicator" id="videoPlatformIndicator">
-                                        <i class="fas fa-link"></i>
-                                    </div>
-                                </div>
-                                <div class="url-preview" id="videoUrlPreview">
-                                    <div class="preview-header">
-                                        <span class="preview-platform youtube" id="videoPreviewPlatform">YouTube</span>
-                                        <span>URL Válida</span>
-                                    </div>
-                                    <div class="preview-url" id="videoPreviewUrl"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="videoThumbnailUrl">URL da Miniatura (opcional)</label>
-                                <input type="url" id="videoThumbnailUrl" class="form-input" placeholder="Link para a miniatura do vídeo">
-                            </div>
-                        </div>
-                        
-                        <div class="progress-bar" id="videoProgressBar" style="display: none;">
-                            <div class="progress-fill" id="videoProgressFill"></div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                            <button type="submit" class="btn btn-full" id="videoSubmitBtn">
-                                <i class="fas fa-plus"></i> Adicionar Videoclipe
-                            </button>
-                            <button type="button" class="btn btn-secondary" onclick="resetVideoForm()">
-                                <i class="fas fa-redo"></i> Limpar
-                            </button>
-                        </div>
-                    </form>
+                
+                <div class="form-group">
+                    <label class="form-label" for="artista">Artista *</label>
+                    <input type="text" id="artista" class="form-input" required>
                 </div>
-
-                <!-- Content Management Page -->
-                <div class="upload-page" id="gerenciarPage">
-                    <h3 style="margin-bottom: 1.5rem;">
-                        <i class="fas fa-cog"></i> Gerenciar Conteúdo
-                    </h3>
-
-                    <!-- Statistics -->
-                    <div class="stats-container">
-                        <div class="stat-card">
-                            <div class="stat-number" id="totalMusicas">0</div>
-                            <div class="stat-label">Total de Músicas</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="totalVideos">0</div>
-                            <div class="stat-label">Total de Videoclipes</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="totalArtistas">0</div>
-                            <div class="stat-label">Total de Artistas</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="totalAlbuns">0</div>
-                            <div class="stat-label">Total de Álbuns</div>
-                        </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="album">Álbum</label>
+                        <input type="text" id="album" class="form-input">
                     </div>
-
-                    <!-- Search and Filter -->
-                    <div class="search-section">
-                        <input type="text" id="searchContent" class="search-input" placeholder="Buscar por título, artista ou álbum...">
-                        <div class="filter-buttons">
-                            <button class="filter-btn active" onclick="filterContent('all')">Todos</button>
-                            <button class="filter-btn" onclick="filterContent('musicas')">Músicas</button>
-                            <button class="filter-btn" onclick="filterContent('videoclipes')">Videoclipes</button>
-                            <button class="filter-btn" onclick="filterContent('kizomba')">Kizomba</button>
-                            <button class="filter-btn" onclick="filterContent('rap')">Rap</button>
-                            <button class="filter-btn" onclick="filterContent('trap')">Trap</button>
-                            <button class="filter-btn" onclick="filterContent('gospel')">Gospel</button>
-                        </div>
-                    </div>
-
-                    <!-- Content List -->
-                    <div class="content-list" id="contentList">
-                        <!-- Content items will be inserted here by JavaScript -->
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="ano">Ano</label>
+                        <input type="number" id="ano" class="form-input" min="1900" max="2030">
                     </div>
                 </div>
-            </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="genero">Gênero *</label>
+                        <select id="genero" class="form-select" required>
+                            <option value="">Selecione um gênero</option>
+                            <option value="kizomba">Kizomba</option>
+                            <option value="rap">Rap</option>
+                            <option value="trap">Trap</option>
+                            <option value="gospel">Gospel</option>
+                            <option value="pop">Pop</option>
+                            <option value="rock">Rock</option>
+                            <option value="funk">Funk</option>
+                            <option value="eletronica">Eletrônica</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="duracao">Duração (segundos)</label>
+                        <input type="number" id="duracao" class="form-input" min="1">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="descricao">Descrição</label>
+                    <textarea id="descricao" class="form-textarea" placeholder="Descrição da música (opcional)"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="videoclipe">URL do Videoclipe (YouTube)</label>
+                    <input type="url" id="videoclipe" class="form-input" placeholder="https://www.youtube.com/watch?v=...">
+                    <small style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.25rem; display: block;">
+                        Cole aqui o link do YouTube do videoclipe da música (opcional)
+                    </small>
+                    <div class="youtube-preview" id="youtubePreview"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Arquivo de Áudio *</label>
+                    <div class="file-input-wrapper" id="audioWrapper">
+                        <input type="file" id="audioFile" class="file-input" accept="audio/*" required>
+                        <div class="file-input-content">
+                            <i class="fas fa-music file-input-icon"></i>
+                            <div class="file-input-text">Clique ou arraste o arquivo de áudio aqui</div>
+                            <div class="file-input-text" style="font-size: 0.9rem;">MP3, WAV, OGG (Máx: 50MB)</div>
+                        </div>
+                    </div>
+                    <div id="audioSelected"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Capa do Álbum</label>
+                    <div class="file-input-wrapper" id="imageWrapper">
+                        <input type="file" id="imageFile" class="file-input" accept="image/*">
+                        <div class="file-input-content">
+                            <i class="fas fa-image file-input-icon"></i>
+                            <div class="file-input-text">Clique ou arraste a imagem da capa aqui</div>
+                            <div class="file-input-text" style="font-size: 0.9rem;">JPG, PNG, GIF (Máx: 10MB)</div>
+                        </div>
+                    </div>
+                    <div id="imageSelected"></div>
+                </div>
+                
+                <div class="progress-bar" id="progressBar" style="display: none;">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-full" id="submitBtn">
+                        <i class="fas fa-upload"></i> Fazer Upload
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                        <i class="fas fa-redo"></i> Limpar
+                    </button>
+                </div>
+            </form>
         </div>
-    </div>
 
-    <!-- Edit Modal -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="editModalTitle">Editar Conteúdo</h3>
-                <button class="close-modal" onclick="closeEditModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="editModalContent">
-                <!-- Edit form will be inserted here -->
-            </div>
+        <div class="upload-queue" id="uploadQueue">
+            <h3 style="margin-bottom: 1rem;">
+                <i class="fas fa-list"></i> Fila de Upload
+            </h3>
+            <div id="uploadItems"></div>
         </div>
     </div>
 
@@ -1143,81 +551,45 @@
             'manager': 'M5N6P'
         };
 
-        // YouTube validation
-        const YouTubeValidation = {
-            patterns: [
-                /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/,
-                /^https?:\/\/(www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]+)/
-            ],
-            icon: 'fab fa-youtube',
-            name: 'YouTube',
-            color: 'youtube',
-
-            isValidUrl(url) {
-                return this.patterns.some(pattern => pattern.test(url));
-            },
-
-            extractVideoId(url) {
-                const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
-                return match ? match[1] : null;
-            }
-        };
-
         // DOM Elements
         const authForm = document.getElementById('authForm');
-        const uploadContainer = document.getElementById('uploadContainer');
+        const uploadForm = document.getElementById('uploadForm');
         const loginForm = document.getElementById('loginForm');
-        const musicasForm = document.getElementById('musicasForm');
-        const videoclipesForm = document.getElementById('videoclipesForm');
+        const musicForm = document.getElementById('musicForm');
         const logoutBtn = document.getElementById('logoutBtn');
         const authMessage = document.getElementById('authMessage');
-        const musicasMessage = document.getElementById('musicasMessage');
-        const videoclipesMessage = document.getElementById('videoclipesMessage');
-
-        // Music upload elements
+        const uploadMessage = document.getElementById('uploadMessage');
         const audioFile = document.getElementById('audioFile');
         const imageFile = document.getElementById('imageFile');
         const audioWrapper = document.getElementById('audioWrapper');
         const imageWrapper = document.getElementById('imageWrapper');
         const audioSelected = document.getElementById('audioSelected');
         const imageSelected = document.getElementById('imageSelected');
-        const musicProgressBar = document.getElementById('musicProgressBar');
-        const musicProgressFill = document.getElementById('musicProgressFill');
-        const musicSubmitBtn = document.getElementById('musicSubmitBtn');
-
-        // Video upload elements
-        const videoFile = document.getElementById('videoFile');
-        const thumbnailFile = document.getElementById('thumbnailFile');
-        const videoWrapper = document.getElementById('videoWrapper');
-        const thumbnailWrapper = document.getElementById('thumbnailWrapper');
-        const videoSelected = document.getElementById('videoSelected');
-        const thumbnailSelected = document.getElementById('thumbnailSelected');
-        const videoUrl = document.getElementById('videoUrl');
-        const videoPlatformIndicator = document.getElementById('videoPlatformIndicator');
-        const videoUrlPreview = document.getElementById('videoUrlPreview');
-        const videoPreviewPlatform = document.getElementById('videoPreviewPlatform');
-        const videoPreviewUrl = document.getElementById('videoPreviewUrl');
-        const videoProgressBar = document.getElementById('videoProgressBar');
-        const videoProgressFill = document.getElementById('videoProgressFill');
-        const videoSubmitBtn = document.getElementById('videoSubmitBtn');
-        const localVideoFields = document.getElementById('localVideoFields');
-        const youtubeFields = document.getElementById('youtubeFields');
-
-        // Content management elements
-        const contentList = document.getElementById('contentList');
-        const searchContent = document.getElementById('searchContent');
-        const editModal = document.getElementById('editModal');
-        const editModalTitle = document.getElementById('editModalTitle');
-        const editModalContent = document.getElementById('editModalContent');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const submitBtn = document.getElementById('submitBtn');
+        const uploadQueue = document.getElementById('uploadQueue');
+        const videoclipeInput = document.getElementById('videoclipe');
+        const youtubePreview = document.getElementById('youtubePreview');
 
         // Global variables
         let isAuthenticated = false;
         let currentUser = null;
-        let currentTab = 'musicas';
-        let videoUploadType = 'local'; // 'local' or 'youtube'
-        let allContent = [];
-        let filteredContent = [];
-        let currentFilter = 'all';
+
+        // YouTube helper functions
+        function extractYouTubeVideoId(url) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        function createYouTubeEmbed(videoId) {
+            return `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+        }
+
+        function isValidYouTubeUrl(url) {
+            return url.includes('youtube.com') || url.includes('youtu.be');
+        }
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
@@ -1239,8 +611,7 @@
                     if (hoursPassed < 24 && AUTH_CREDENTIALS[username] === key) {
                         isAuthenticated = true;
                         currentUser = username;
-                        showUploadInterface();
-                        loadManagementData();
+                        showUploadForm();
                     } else {
                         localStorage.removeItem('diua_auth');
                         showAuthForm();
@@ -1254,97 +625,39 @@
             }
         }
 
-        // Show authentication form
         function showAuthForm() {
             authForm.classList.remove('hidden');
-            uploadContainer.style.display = 'none';
+            uploadForm.classList.add('hidden');
             logoutBtn.classList.add('hidden');
         }
 
-        // Show upload interface
-        function showUploadInterface() {
-            authForm.classList.add('hidden');
-            uploadContainer.style.display = 'block';
-            logoutBtn.classList.remove('hidden');
-        }
-
-        // Setup event listeners
         function setupEventListeners() {
             loginForm.addEventListener('submit', handleLogin);
-            musicasForm.addEventListener('submit', handleMusicUpload);
-            videoclipesForm.addEventListener('submit', handleVideoUpload);
-            
-            // File upload events
+            musicForm.addEventListener('submit', handleMusicUpload);
             audioFile.addEventListener('change', handleAudioFileChange);
             imageFile.addEventListener('change', handleImageFileChange);
-            videoFile.addEventListener('change', handleVideoFileChange);
-            thumbnailFile.addEventListener('change', handleThumbnailFileChange);
+            videoclipeInput.addEventListener('input', handleVideoclipeInput);
             
             setupDragAndDrop(audioWrapper, audioFile, 'audio');
             setupDragAndDrop(imageWrapper, imageFile, 'image');
-            setupDragAndDrop(videoWrapper, videoFile, 'video');
-            setupDragAndDrop(thumbnailWrapper, thumbnailFile, 'image');
-            
-            // URL validation
-            videoUrl.addEventListener('input', validateVideoUrl);
-            videoUrl.addEventListener('blur', validateVideoUrl);
-
-            // Search functionality
-            searchContent.addEventListener('input', handleSearch);
         }
 
-        // Switch tabs
-        function switchTab(tab) {
-            currentTab = tab;
+        function handleVideoclipeInput() {
+            const url = videoclipeInput.value.trim();
             
-            // Update tab buttons
-            document.querySelectorAll('.upload-tab').forEach(tabBtn => {
-                tabBtn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Update pages
-            document.querySelectorAll('.upload-page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            document.getElementById(`${tab}Page`).classList.add('active');
-
-            // Load management data if switching to management tab
-            if (tab === 'gerenciar') {
-                loadManagementData();
-            }
-        }
-
-        // Select video upload type
-        function selectVideoType(type) {
-            videoUploadType = type;
-            
-            // Update UI
-            document.querySelectorAll('.video-type-option').forEach(option => {
-                option.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Show/hide appropriate fields
-            if (type === 'local') {
-                localVideoFields.style.display = 'block';
-                youtubeFields.style.display = 'none';
-                
-                // Make video file required
-                videoFile.required = true;
-                if (videoUrl) videoUrl.required = false;
+            if (url && isValidYouTubeUrl(url)) {
+                const videoId = extractYouTubeVideoId(url);
+                if (videoId) {
+                    youtubePreview.innerHTML = createYouTubeEmbed(videoId);
+                    youtubePreview.style.display = 'block';
+                } else {
+                    youtubePreview.style.display = 'none';
+                }
             } else {
-                localVideoFields.style.display = 'none';
-                youtubeFields.style.display = 'block';
-                
-                // Make URL required
-                if (videoUrl) videoUrl.required = true;
-                videoFile.required = false;
+                youtubePreview.style.display = 'none';
             }
         }
 
-        // Handle login
         async function handleLogin(e) {
             e.preventDefault();
             
@@ -1377,75 +690,86 @@
                 showAuthMessage('Login realizado com sucesso!', 'success');
                 
                 setTimeout(() => {
-                    showUploadInterface();
-                    loadManagementData();
+                    showUploadForm();
                 }, 1000);
             } else {
                 showAuthMessage('Credenciais inválidas. Verifique o username e a chave de acesso.', 'error');
             }
         }
 
-        // Handle logout
+        function showUploadForm() {
+            authForm.classList.add('hidden');
+            uploadForm.classList.remove('hidden');
+            uploadForm.style.display = 'block';
+            logoutBtn.classList.remove('hidden');
+        }
+
         function logout() {
             localStorage.removeItem('diua_auth');
             isAuthenticated = false;
             currentUser = null;
             
-            uploadContainer.style.display = 'none';
+            uploadForm.classList.add('hidden');
+            uploadForm.style.display = 'none';
             logoutBtn.classList.add('hidden');
             authForm.classList.remove('hidden');
             
             loginForm.reset();
-            resetMusicForm();
-            resetVideoForm();
+            resetForm();
             
             showAuthMessage('Logout realizado com sucesso.', 'success');
         }
 
-        // Handle music upload
         async function handleMusicUpload(e) {
             e.preventDefault();
             
             if (!isAuthenticated) {
-                showMessage('musicasMessage', 'Não autenticado. Faça login novamente.', 'error');
+                showUploadMessage('Não autenticado. Faça login novamente.', 'error');
                 return;
             }
             
-            musicasMessage.innerHTML = '';
+            uploadMessage.innerHTML = '';
             
-            const titulo = document.getElementById('musicTitulo').value.trim();
-            const artista = document.getElementById('musicArtista').value.trim();
-            const album = document.getElementById('musicAlbum').value.trim();
-            const ano = document.getElementById('musicAno').value;
-            const genero = document.getElementById('musicGenero').value;
-            const duracao = document.getElementById('musicDuracao').value;
-            const descricao = document.getElementById('musicDescricao').value.trim();
+            const titulo = document.getElementById('titulo').value.trim();
+            const artista = document.getElementById('artista').value.trim();
+            const album = document.getElementById('album').value.trim();
+            const ano = document.getElementById('ano').value;
+            const genero = document.getElementById('genero').value;
+            const duracao = document.getElementById('duracao').value;
+            const descricao = document.getElementById('descricao').value.trim();
+            const videoclipeUrl = document.getElementById('videoclipe').value.trim();
             
             if (!titulo || !artista || !genero || !audioFile.files[0]) {
-                showMessage('musicasMessage', 'Por favor, preencha todos os campos obrigatórios e selecione um arquivo de áudio.', 'error');
+                showUploadMessage('Por favor, preencha todos os campos obrigatórios e selecione um arquivo de áudio.', 'error');
+                return;
+            }
+            
+            // Validate YouTube URL if provided
+            if (videoclipeUrl && !isValidYouTubeUrl(videoclipeUrl)) {
+                showUploadMessage('URL do videoclipe deve ser um link válido do YouTube.', 'error');
                 return;
             }
             
             const audioFileSize = audioFile.files[0].size / (1024 * 1024);
             if (audioFileSize > 50) {
-                showMessage('musicasMessage', 'O arquivo de áudio não pode ser maior que 50MB.', 'error');
+                showUploadMessage('O arquivo de áudio não pode ser maior que 50MB.', 'error');
                 return;
             }
             
             if (imageFile.files[0]) {
                 const imageFileSize = imageFile.files[0].size / (1024 * 1024);
                 if (imageFileSize > 10) {
-                    showMessage('musicasMessage', 'A imagem da capa não pode ser maior que 10MB.', 'error');
+                    showUploadMessage('A imagem da capa não pode ser maior que 10MB.', 'error');
                     return;
                 }
             }
             
             try {
-                musicSubmitBtn.disabled = true;
-                musicSubmitBtn.innerHTML = '<div class="loading"><div class="spinner"></div> Enviando...</div>';
-                musicProgressBar.style.display = 'block';
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<div class="loading"><div class="spinner"></div> Enviando...</div>';
+                progressBar.style.display = 'block';
                 
-                showMessage('musicasMessage', 'Enviando arquivo de áudio...', 'warning');
+                showUploadMessage('Enviando arquivo de áudio...', 'warning');
                 const audioFileName = `audio_${Date.now()}_${audioFile.files[0].name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
                 
                 const { data: audioData, error: audioError } = await supabase.storage
@@ -1453,7 +777,7 @@
                     .upload(audioFileName, audioFile.files[0], {
                         onUploadProgress: (progress) => {
                             const percent = (progress.loaded / progress.total) * 50;
-                            musicProgressFill.style.width = `${percent}%`;
+                            progressFill.style.width = `${percent}%`;
                         }
                     });
                 
@@ -1466,7 +790,7 @@
                 let imageUrl = null;
                 
                 if (imageFile.files[0]) {
-                    showMessage('musicasMessage', 'Enviando imagem da capa...', 'warning');
+                    showUploadMessage('Enviando imagem da capa...', 'warning');
                     const imageFileName = `capa_${Date.now()}_${imageFile.files[0].name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
                     
                     const { data: imageData, error: imageError } = await supabase.storage
@@ -1474,7 +798,7 @@
                         .upload(imageFileName, imageFile.files[0], {
                             onUploadProgress: (progress) => {
                                 const percent = 50 + (progress.loaded / progress.total) * 30;
-                                musicProgressFill.style.width = `${percent}%`;
+                                progressFill.style.width = `${percent}%`;
                             }
                         });
                     
@@ -1487,8 +811,8 @@
                     imageUrl = imageUrlData.publicUrl;
                 }
                 
-                showMessage('musicasMessage', 'Salvando dados da música...', 'warning');
-                musicProgressFill.style.width = '90%';
+                showUploadMessage('Salvando dados da música...', 'warning');
+                progressFill.style.width = '90%';
                 
                 const musicData = {
                     titulo: titulo,
@@ -1500,6 +824,7 @@
                     descricao: descricao || null,
                     audio_url: audioUrlData.publicUrl,
                     capa_url: imageUrl,
+                    videoclipe_url: videoclipeUrl || null,
                     uploader: currentUser,
                     created_at: new Date().toISOString()
                 };
@@ -1510,306 +835,47 @@
                 
                 if (dbError) throw dbError;
                 
-                await updateArtistAndAlbum(artista, album, genero, ano, imageUrl);
-                
-                musicProgressFill.style.width = '100%';
-                showMessage('musicasMessage', 'Música enviada com sucesso!', 'success');
-                
-                setTimeout(() => {
-                    resetMusicForm();
-                    loadManagementData();
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Erro no upload:', error);
-                showMessage('musicasMessage', `Erro no upload: ${error.message}`, 'error');
-            } finally {
-                musicSubmitBtn.disabled = false;
-                musicSubmitBtn.innerHTML = '<i class="fas fa-upload"></i> Fazer Upload';
-                
-                setTimeout(() => {
-                    musicProgressBar.style.display = 'none';
-                    musicProgressFill.style.width = '0%';
-                }, 3000);
-            }
-        }
-
-        // Handle video upload
-        async function handleVideoUpload(e) {
-            e.preventDefault();
-            
-            if (!isAuthenticated) {
-                showMessage('videoclipesMessage', 'Não autenticado. Faça login novamente.', 'error');
-                return;
-            }
-            
-            videoclipesMessage.innerHTML = '';
-            
-            const titulo = document.getElementById('videoTitulo').value.trim();
-            const artista = document.getElementById('videoArtista').value.trim();
-            const album = document.getElementById('videoAlbum').value.trim();
-            const ano = document.getElementById('videoAno').value;
-            const genero = document.getElementById('videoGenero').value;
-            const duracao = document.getElementById('videoDuracao').value;
-            const descricao = document.getElementById('videoDescricao').value.trim();
-            
-            if (!titulo || !artista || !genero) {
-                showMessage('videoclipesMessage', 'Por favor, preencha todos os campos obrigatórios.', 'error');
-                return;
-            }
-
-            // Validate based on upload type
-            if (videoUploadType === 'youtube') {
-                const url = videoUrl.value.trim();
-                const thumbnailUrl = document.getElementById('videoThumbnailUrl').value.trim();
-                
-                if (!url) {
-                    showMessage('videoclipesMessage', 'Por favor, insira uma URL do YouTube.', 'error');
-                    return;
-                }
-
-                if (!YouTubeValidation.isValidUrl(url)) {
-                    showMessage('videoclipesMessage', 'Por favor, use uma URL válida do YouTube.', 'error');
-                    return;
-                }
-
-                // Handle YouTube upload
-                await handleYouTubeVideoUpload(titulo, artista, album, ano, genero, duracao, descricao, url, thumbnailUrl);
-            } else {
-                // Handle local file upload
-                if (!videoFile.files[0]) {
-                    showMessage('videoclipesMessage', 'Por favor, selecione um arquivo de vídeo.', 'error');
-                    return;
-                }
-
-                const videoFileSize = videoFile.files[0].size / (1024 * 1024);
-                if (videoFileSize > 500) {
-                    showMessage('videoclipesMessage', 'O arquivo de vídeo não pode ser maior que 500MB.', 'error');
-                    return;
-                }
-
-                if (thumbnailFile.files[0]) {
-                    const thumbnailFileSize = thumbnailFile.files[0].size / (1024 * 1024);
-                    if (thumbnailFileSize > 10) {
-                        showMessage('videoclipesMessage', 'A miniatura não pode ser maior que 10MB.', 'error');
-                        return;
-                    }
-                }
-
-                await handleLocalVideoUpload(titulo, artista, album, ano, genero, duracao, descricao);
-            }
-        }
-
-        // Handle YouTube video upload
-        async function handleYouTubeVideoUpload(titulo, artista, album, ano, genero, duracao, descricao, url, thumbnailUrl) {
-            try {
-                videoSubmitBtn.disabled = true;
-                videoSubmitBtn.innerHTML = '<div class="loading"><div class="spinner"></div> Adicionando...</div>';
-                videoProgressBar.style.display = 'block';
-                
-                showMessage('videoclipesMessage', 'Salvando videoclipe...', 'warning');
-                videoProgressFill.style.width = '50%';
-                
-                const videoData = {
-                    titulo: titulo,
-                    artista: artista,
-                    album: album || null,
-                    ano: ano ? parseInt(ano) : null,
-                    genero: genero,
-                    duracao: duracao ? parseInt(duracao) : null,
-                    descricao: descricao || null,
-                    video_url: url,
-                    thumbnail_url: thumbnailUrl || null,
-                    uploader: currentUser,
-                    created_at: new Date().toISOString()
-                };
-                
-                const { data: dbData, error: dbError } = await supabase
-                    .from('videoclipes')
-                    .insert([videoData]);
-                
-                if (dbError) throw dbError;
-                
-                videoProgressFill.style.width = '80%';
-                
-                await updateArtistAndAlbum(artista, album, genero, ano, thumbnailUrl);
-                
-                videoProgressFill.style.width = '100%';
-                showMessage('videoclipesMessage', 'Videoclipe adicionado com sucesso!', 'success');
-                
-                setTimeout(() => {
-                    resetVideoForm();
-                    loadManagementData();
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Erro ao adicionar videoclipe:', error);
-                showMessage('videoclipesMessage', `Erro ao adicionar videoclipe: ${error.message}`, 'error');
-            } finally {
-                videoSubmitBtn.disabled = false;
-                videoSubmitBtn.innerHTML = '<i class="fas fa-plus"></i> Adicionar Videoclipe';
-                
-                setTimeout(() => {
-                    videoProgressBar.style.display = 'none';
-                    videoProgressFill.style.width = '0%';
-                }, 3000);
-            }
-        }
-
-        // Handle local video upload
-        async function handleLocalVideoUpload(titulo, artista, album, ano, genero, duracao, descricao) {
-            try {
-                videoSubmitBtn.disabled = true;
-                videoSubmitBtn.innerHTML = '<div class="loading"><div class="spinner"></div> Enviando...</div>';
-                videoProgressBar.style.display = 'block';
-                
-                showMessage('videoclipesMessage', 'Enviando arquivo de vídeo...', 'warning');
-                const videoFileName = `video_${Date.now()}_${videoFile.files[0].name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-                
-                const { data: videoData, error: videoError } = await supabase.storage
-                    .from('videos')
-                    .upload(videoFileName, videoFile.files[0], {
-                        onUploadProgress: (progress) => {
-                            const percent = (progress.loaded / progress.total) * 60;
-                            videoProgressFill.style.width = `${percent}%`;
-                        }
-                    });
-                
-                if (videoError) throw videoError;
-                
-                const { data: videoUrlData } = supabase.storage
-                    .from('videos')
-                    .getPublicUrl(videoFileName);
-                
-                let thumbnailUrl = null;
-                
-                if (thumbnailFile.files[0]) {
-                    showMessage('videoclipesMessage', 'Enviando miniatura...', 'warning');
-                    const thumbnailFileName = `thumbnail_${Date.now()}_${thumbnailFile.files[0].name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-                    
-                    const { data: thumbData, error: thumbError } = await supabase.storage
-                        .from('capas')
-                        .upload(thumbnailFileName, thumbnailFile.files[0], {
-                            onUploadProgress: (progress) => {
-                                const percent = 60 + (progress.loaded / progress.total) * 20;
-                                videoProgressFill.style.width = `${percent}%`;
-                            }
-                        });
-                    
-                    if (thumbError) throw thumbError;
-                    
-                    const { data: thumbUrlData } = supabase.storage
-                        .from('capas')
-                        .getPublicUrl(thumbnailFileName);
-                    
-                    thumbnailUrl = thumbUrlData.publicUrl;
-                }
-                
-                showMessage('videoclipesMessage', 'Salvando dados do videoclipe...', 'warning');
-                videoProgressFill.style.width = '90%';
-                
-                const videoDBData = {
-                    titulo: titulo,
-                    artista: artista,
-                    album: album || null,
-                    ano: ano ? parseInt(ano) : null,
-                    genero: genero,
-                    duracao: duracao ? parseInt(duracao) : null,
-                    descricao: descricao || null,
-                    video_url: videoUrlData.publicUrl,
-                    thumbnail_url: thumbnailUrl,
-                    uploader: currentUser,
-                    created_at: new Date().toISOString()
-                };
-                
-                const { data: dbData, error: dbError } = await supabase
-                    .from('videoclipes')
-                    .insert([videoDBData]);
-                
-                if (dbError) throw dbError;
-                
-                await updateArtistAndAlbum(artista, album, genero, ano, thumbnailUrl);
-                
-                videoProgressFill.style.width = '100%';
-                showMessage('videoclipesMessage', 'Videoclipe enviado com sucesso!', 'success');
-                
-                setTimeout(() => {
-                    resetVideoForm();
-                    loadManagementData();
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Erro no upload:', error);
-                showMessage('videoclipesMessage', `Erro no upload: ${error.message}`, 'error');
-            } finally {
-                videoSubmitBtn.disabled = false;
-                videoSubmitBtn.innerHTML = '<i class="fas fa-upload"></i> Fazer Upload';
-                
-                setTimeout(() => {
-                    videoProgressBar.style.display = 'none';
-                    videoProgressFill.style.width = '0%';
-                }, 3000);
-            }
-        }
-
-        // Update artist and album data
-        async function updateArtistAndAlbum(artista, album, genero, ano, imageUrl) {
-            // Update artist
-            await supabase
-                .from('artistas')
-                .upsert([{
-                    nome: artista,
-                    genero: genero,
-                    imagem_url: imageUrl
-                }], { onConflict: 'nome' });
-            
-            // Update album if provided
-            if (album) {
-                await supabase
-                    .from('albuns')
+                const { data: artistData, error: artistError } = await supabase
+                    .from('artistas')
                     .upsert([{
-                        titulo: album,
-                        artista: artista,
-                        ano: ano ? parseInt(ano) : null,
-                        capa_url: imageUrl,
-                        num_faixas: 1
-                    }], { onConflict: 'titulo,artista' });
+                        nome: artista,
+                        genero: genero,
+                        imagem_url: imageUrl
+                    }], { onConflict: 'nome' });
+                
+                if (album) {
+                    const { data: albumData, error: albumError } = await supabase
+                        .from('albuns')
+                        .upsert([{
+                            titulo: album,
+                            artista: artista,
+                            ano: ano ? parseInt(ano) : null,
+                            capa_url: imageUrl,
+                            num_faixas: 1
+                        }], { onConflict: 'titulo,artista' });
+                }
+                
+                progressFill.style.width = '100%';
+                showUploadMessage('Música enviada com sucesso!', 'success');
+                
+                setTimeout(() => {
+                    resetForm();
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Erro no upload:', error);
+                showUploadMessage(`Erro no upload: ${error.message}`, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-upload"></i> Fazer Upload';
+                
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                    progressFill.style.width = '0%';
+                }, 3000);
             }
         }
 
-        // Validate video URL
-        function validateVideoUrl() {
-            const url = videoUrl.value.trim();
-            
-            if (!url) {
-                hideVideoIndicators();
-                return;
-            }
-
-            if (YouTubeValidation.isValidUrl(url)) {
-                showVideoIndicators(url);
-            } else {
-                hideVideoIndicators();
-                showMessage('videoclipesMessage', 'URL do YouTube inválida. Verifique o link e tente novamente.', 'error');
-            }
-        }
-
-        function showVideoIndicators(url) {
-            videoPlatformIndicator.innerHTML = `<i class="${YouTubeValidation.icon}"></i>`;
-            videoPlatformIndicator.className = `platform-indicator visible ${YouTubeValidation.color}`;
-            
-            videoPreviewPlatform.textContent = YouTubeValidation.name;
-            videoPreviewPlatform.className = `preview-platform ${YouTubeValidation.color}`;
-            videoPreviewUrl.textContent = url;
-            videoUrlPreview.classList.add('visible');
-        }
-
-        function hideVideoIndicators() {
-            videoPlatformIndicator.classList.remove('visible');
-            videoUrlPreview.classList.remove('visible');
-        }
-
-        // File handling functions
         function handleAudioFileChange() {
             const file = audioFile.files[0];
             if (file) {
@@ -1823,7 +889,7 @@
                 const audio = new Audio();
                 audio.onloadedmetadata = function() {
                     const duration = Math.floor(audio.duration);
-                    document.getElementById('musicDuracao').value = duration;
+                    document.getElementById('duracao').value = duration;
                 };
                 audio.src = URL.createObjectURL(file);
             } else {
@@ -1845,42 +911,6 @@
             }
         }
 
-        function handleVideoFileChange() {
-            const file = videoFile.files[0];
-            if (file) {
-                videoSelected.innerHTML = `
-                    <div class="file-selected">
-                        <i class="fas fa-video"></i>
-                        ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)
-                    </div>
-                `;
-
-                // Try to get video duration
-                const video = document.createElement('video');
-                video.onloadedmetadata = function() {
-                    const duration = Math.floor(video.duration);
-                    document.getElementById('videoDuracao').value = duration;
-                };
-                video.src = URL.createObjectURL(file);
-            } else {
-                videoSelected.innerHTML = '';
-            }
-        }
-
-        function handleThumbnailFileChange() {
-            const file = thumbnailFile.files[0];
-            if (file) {
-                thumbnailSelected.innerHTML = `
-                    <div class="file-selected">
-                        <i class="fas fa-image"></i>
-                        ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)
-                    </div>
-                `;
-            } else {
-                thumbnailSelected.innerHTML = '';
-            }
-        }
-
         function setupDragAndDrop(wrapper, input, type) {
             wrapper.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -1898,437 +928,32 @@
                 const files = e.dataTransfer.files;
                 if (files.length > 0) {
                     const file = files[0];
-                    let isValidType = false;
-                    
-                    if (type === 'audio') {
-                        isValidType = file.type.startsWith('audio/');
-                    } else if (type === 'video') {
-                        isValidType = file.type.startsWith('video/');
-                    } else if (type === 'image') {
-                        isValidType = file.type.startsWith('image/');
-                    }
+                    const isValidType = type === 'audio' ? 
+                        file.type.startsWith('audio/') : 
+                        file.type.startsWith('image/');
                     
                     if (isValidType) {
                         input.files = files;
                         if (type === 'audio') {
                             handleAudioFileChange();
-                        } else if (type === 'video') {
-                            handleVideoFileChange();
-                        } else if (input === imageFile) {
+                        } else {
                             handleImageFileChange();
-                        } else if (input === thumbnailFile) {
-                            handleThumbnailFileChange();
                         }
                     } else {
-                        const typeLabel = type === 'audio' ? 'áudio' : type === 'video' ? 'vídeo' : 'imagem';
-                        const messageContainer = type === 'audio' ? 'musicasMessage' : 'videoclipesMessage';
-                        showMessage(messageContainer, `Por favor, selecione um arquivo de ${typeLabel} válido.`, 'error');
+                        showUploadMessage(`Por favor, selecione um arquivo de ${type === 'audio' ? 'áudio' : 'imagem'} válido.`, 'error');
                     }
                 }
             });
         }
 
-        // Load management data
-        async function loadManagementData() {
-            if (!isAuthenticated) return;
-
-            try {
-                // Load all content
-                const [musicasResponse, videosResponse, artistasResponse, albunsResponse] = await Promise.all([
-                    supabase.from('musicas').select('*').order('created_at', { ascending: false }),
-                    supabase.from('videoclipes').select('*').order('created_at', { ascending: false }),
-                    supabase.from('artistas').select('*').order('nome'),
-                    supabase.from('albuns').select('*').order('ano', { ascending: false })
-                ]);
-
-                const musicas = musicasResponse.data || [];
-                const videos = videosResponse.data || [];
-                const artistas = artistasResponse.data || [];
-                const albuns = albunsResponse.data || [];
-
-                // Combine all content
-                allContent = [
-                    ...musicas.map(item => ({ ...item, type: 'musica' })),
-                    ...videos.map(item => ({ ...item, type: 'videoclipe' }))
-                ];
-
-                // Update statistics
-                document.getElementById('totalMusicas').textContent = musicas.length;
-                document.getElementById('totalVideos').textContent = videos.length;
-                document.getElementById('totalArtistas').textContent = artistas.length;
-                document.getElementById('totalAlbuns').textContent = albuns.length;
-
-                // Display content
-                filterContent(currentFilter);
-
-            } catch (error) {
-                console.error('Erro ao carregar dados:', error);
-            }
-        }
-
-        // Filter content
-        function filterContent(filter) {
-            currentFilter = filter;
-            
-            // Update filter buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event?.target?.classList.add('active') || document.querySelector(`.filter-btn[onclick="filterContent('${filter}')"]`)?.classList.add('active');
-
-            // Filter content based on criteria
-            if (filter === 'all') {
-                filteredContent = allContent;
-            } else if (filter === 'musicas') {
-                filteredContent = allContent.filter(item => item.type === 'musica');
-            } else if (filter === 'videoclipes') {
-                filteredContent = allContent.filter(item => item.type === 'videoclipe');
-            } else {
-                // Filter by genre
-                filteredContent = allContent.filter(item => item.genero === filter);
-            }
-
-            displayContent();
-        }
-
-        // Handle search
-        function handleSearch() {
-            const query = searchContent.value.toLowerCase().trim();
-            
-            if (query === '') {
-                filterContent(currentFilter);
-                return;
-            }
-
-            filteredContent = allContent.filter(item => {
-                return item.titulo.toLowerCase().includes(query) ||
-                       item.artista.toLowerCase().includes(query) ||
-                       (item.album && item.album.toLowerCase().includes(query));
-            });
-
-            displayContent();
-        }
-
-        // Display content list
-        function displayContent() {
-            contentList.innerHTML = '';
-
-            if (filteredContent.length === 0) {
-                contentList.innerHTML = `
-                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
-                        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                        <h3>Nenhum conteúdo encontrado</h3>
-                        <p>Tente ajustar os filtros ou termos de busca.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            filteredContent.forEach(item => {
-                const contentItem = createContentItem(item);
-                contentList.appendChild(contentItem);
-            });
-        }
-
-        // Create content item element
-        function createContentItem(item) {
-            const div = document.createElement('div');
-            div.className = 'content-item';
-
-            // Get thumbnail URL
-            let thumbnailUrl = item.capa_url || item.thumbnail_url || 'https://picsum.photos/300/300';
-            if (item.type === 'videoclipe' && item.video_url && item.video_url.includes('youtube.com')) {
-                const videoId = YouTubeValidation.extractVideoId(item.video_url);
-                if (videoId) {
-                    thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-                }
-            }
-
-            const typeIcon = item.type === 'musica' ? 'fas fa-music' : 'fas fa-video';
-            const typeLabel = item.type === 'musica' ? 'Música' : 'Videoclipe';
-
-            div.innerHTML = `
-                <img src="${thumbnailUrl}" alt="${item.titulo}" class="content-thumbnail" onerror="this.src='https://picsum.photos/300/300'">
-                <div class="content-info">
-                    <div class="content-title">
-                        <i class="${typeIcon}"></i> ${item.titulo}
-                    </div>
-                    <div class="content-artist">${item.artista}</div>
-                    <div class="content-details">
-                        ${typeLabel} • ${item.genero} • ${item.album || 'Sem álbum'} • ${item.ano || 'Sem ano'}
-                    </div>
-                </div>
-                <div class="content-actions">
-                    <button class="btn btn-small btn-warning" onclick="editContent('${item.type}', ${item.id})">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
-                    <button class="btn btn-small btn-danger" onclick="deleteContent('${item.type}', ${item.id}, '${item.titulo}')">
-                        <i class="fas fa-trash"></i> Excluir
-                    </button>
-                </div>
-            `;
-
-            return div;
-        }
-
-        // Edit content
-        async function editContent(type, id) {
-            try {
-                let content;
-                if (type === 'musica') {
-                    const { data } = await supabase.from('musicas').select('*').eq('id', id).single();
-                    content = data;
-                } else {
-                    const { data } = await supabase.from('videoclipes').select('*').eq('id', id).single();
-                    content = data;
-                }
-
-                if (!content) {
-                    alert('Conteúdo não encontrado.');
-                    return;
-                }
-
-                editModalTitle.textContent = `Editar ${type === 'musica' ? 'Música' : 'Videoclipe'}`;
-                editModalContent.innerHTML = createEditForm(type, content);
-                editModal.classList.add('active');
-
-            } catch (error) {
-                console.error('Erro ao carregar conteúdo:', error);
-                alert('Erro ao carregar conteúdo para edição.');
-            }
-        }
-
-        // Create edit form
-        function createEditForm(type, content) {
-            const isVideo = type === 'videoclipe';
-            const isYouTubeVideo = isVideo && content.video_url && content.video_url.includes('youtube.com');
-            
-            return `
-                <form id="editForm" onsubmit="saveEdit(event, '${type}', ${content.id})">
-                    <div class="form-group">
-                        <label class="form-label">Título *</label>
-                        <input type="text" id="editTitulo" class="form-input" value="${content.titulo}" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Artista *</label>
-                        <input type="text" id="editArtista" class="form-input" value="${content.artista}" required>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Álbum</label>
-                            <input type="text" id="editAlbum" class="form-input" value="${content.album || ''}">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Ano</label>
-                            <input type="number" id="editAno" class="form-input" min="1900" max="2030" value="${content.ano || ''}">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Gênero *</label>
-                            <select id="editGenero" class="form-select" required>
-                                <option value="">Selecione um gênero</option>
-                                <option value="kizomba" ${content.genero === 'kizomba' ? 'selected' : ''}>Kizomba</option>
-                                <option value="rap" ${content.genero === 'rap' ? 'selected' : ''}>Rap</option>
-                                <option value="trap" ${content.genero === 'trap' ? 'selected' : ''}>Trap</option>
-                                <option value="gospel" ${content.genero === 'gospel' ? 'selected' : ''}>Gospel</option>
-                                <option value="pop" ${content.genero === 'pop' ? 'selected' : ''}>Pop</option>
-                                <option value="rock" ${content.genero === 'rock' ? 'selected' : ''}>Rock</option>
-                                <option value="funk" ${content.genero === 'funk' ? 'selected' : ''}>Funk</option>
-                                <option value="eletronica" ${content.genero === 'eletronica' ? 'selected' : ''}>Eletrônica</option>
-                                <option value="outros" ${content.genero === 'outros' ? 'selected' : ''}>Outros</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Duração (segundos)</label>
-                            <input type="number" id="editDuracao" class="form-input" min="1" value="${content.duracao || ''}">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Descrição</label>
-                        <textarea id="editDescricao" class="form-textarea">${content.descricao || ''}</textarea>
-                    </div>
-                    
-                    ${isVideo ? `
-                        ${isYouTubeVideo ? `
-                            <div class="form-group">
-                                <label class="form-label">URL do YouTube *</label>
-                                <input type="url" id="editVideoUrl" class="form-input" value="${content.video_url}" required>
-                            </div>
-                        ` : `
-                            <div class="form-group">
-                                <label class="form-label">URL do Vídeo *</label>
-                                <input type="url" id="editVideoUrl" class="form-input" value="${content.video_url}" required>
-                            </div>
-                        `}
-                        
-                        <div class="form-group">
-                            <label class="form-label">URL da Miniatura</label>
-                            <input type="url" id="editThumbnail" class="form-input" value="${content.thumbnail_url || ''}">
-                        </div>
-                    ` : `
-                        <div class="form-group">
-                            <label class="form-label">URL da Capa</label>
-                            <input type="url" id="editCapa" class="form-input" value="${content.capa_url || ''}">
-                        </div>
-                    `}
-                    
-                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                        <button type="submit" class="btn btn-full">
-                            <i class="fas fa-save"></i> Salvar Alterações
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">
-                            <i class="fas fa-times"></i> Cancelar
-                        </button>
-                    </div>
-                </form>
-            `;
-        }
-
-        // Save edit
-        async function saveEdit(e, type, id) {
-            e.preventDefault();
-
-            const titulo = document.getElementById('editTitulo').value.trim();
-            const artista = document.getElementById('editArtista').value.trim();
-            const album = document.getElementById('editAlbum').value.trim();
-            const ano = document.getElementById('editAno').value;
-            const genero = document.getElementById('editGenero').value;
-            const duracao = document.getElementById('editDuracao').value;
-            const descricao = document.getElementById('editDescricao').value.trim();
-
-            if (!titulo || !artista || !genero) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-
-            try {
-                const updateData = {
-                    titulo,
-                    artista,
-                    album: album || null,
-                    ano: ano ? parseInt(ano) : null,
-                    genero,
-                    duracao: duracao ? parseInt(duracao) : null,
-                    descricao: descricao || null
-                };
-
-                if (type === 'videoclipe') {
-                    const videoUrl = document.getElementById('editVideoUrl').value.trim();
-                    const thumbnailUrl = document.getElementById('editThumbnail').value.trim();
-                    
-                    if (!videoUrl) {
-                        alert('URL do vídeo é obrigatória.');
-                        return;
-                    }
-                    
-                    // Validate YouTube URL if it looks like YouTube
-                    if (videoUrl.includes('youtube.com') && !YouTubeValidation.isValidUrl(videoUrl)) {
-                        alert('URL do YouTube inválida.');
-                        return;
-                    }
-                    
-                    updateData.video_url = videoUrl;
-                    updateData.thumbnail_url = thumbnailUrl || null;
-                } else {
-                    const capaUrl = document.getElementById('editCapa').value.trim();
-                    updateData.capa_url = capaUrl || null;
-                }
-
-                const tableName = type === 'musica' ? 'musicas' : 'videoclipes';
-                const { error } = await supabase
-                    .from(tableName)
-                    .update(updateData)
-                    .eq('id', id);
-
-                if (error) throw error;
-
-                alert('Conteúdo atualizado com sucesso!');
-                closeEditModal();
-                loadManagementData();
-
-            } catch (error) {
-                console.error('Erro ao atualizar:', error);
-                alert('Erro ao atualizar conteúdo.');
-            }
-        }
-
-        // Delete content
-        async function deleteContent(type, id, title) {
-            if (!confirm(`Tem certeza que deseja excluir "${title}"? Esta ação não pode ser desfeita.`)) {
-                return;
-            }
-
-            try {
-                const tableName = type === 'musica' ? 'musicas' : 'videoclipes';
-                const { error } = await supabase
-                    .from(tableName)
-                    .delete()
-                    .eq('id', id);
-
-                if (error) throw error;
-
-                alert('Conteúdo excluído com sucesso!');
-                loadManagementData();
-
-            } catch (error) {
-                console.error('Erro ao excluir:', error);
-                alert('Erro ao excluir conteúdo.');
-            }
-        }
-
-        // Close edit modal
-        function closeEditModal() {
-            editModal.classList.remove('active');
-            editModalContent.innerHTML = '';
-        }
-
-        // Reset forms
-        function resetMusicForm() {
-            musicasForm.reset();
+        function resetForm() {
+            musicForm.reset();
             audioSelected.innerHTML = '';
             imageSelected.innerHTML = '';
-            musicasMessage.innerHTML = '';
-            musicProgressBar.style.display = 'none';
-            musicProgressFill.style.width = '0%';
-        }
-
-        function resetVideoForm() {
-            videoclipesForm.reset();
-            videoSelected.innerHTML = '';
-            thumbnailSelected.innerHTML = '';
-            hideVideoIndicators();
-            videoclipesMessage.innerHTML = '';
-            videoProgressBar.style.display = 'none';
-            videoProgressFill.style.width = '0%';
-            
-            // Reset to local upload type
-            selectVideoType('local');
-            document.querySelectorAll('.video-type-option').forEach(option => {
-                option.classList.remove('active');
-            });
-            document.querySelector('.video-type-option').classList.add('active');
-        }
-
-        // Utility functions
-        function showMessage(containerId, message, type) {
-            const alertClass = `alert-${type}`;
-            const icon = type === 'success' ? 'fas fa-check-circle' : 
-                        type === 'error' ? 'fas fa-exclamation-circle' : 
-                        'fas fa-info-circle';
-            
-            document.getElementById(containerId).innerHTML = `
-                <div class="alert ${alertClass}">
-                    <i class="${icon}"></i>
-                    ${message}
-                </div>
-            `;
+            uploadMessage.innerHTML = '';
+            progressBar.style.display = 'none';
+            progressFill.style.width = '0%';
+            youtubePreview.style.display = 'none';
         }
 
         function showAuthMessage(message, type) {
@@ -2338,6 +963,20 @@
                         'fas fa-info-circle';
             
             authMessage.innerHTML = `
+                <div class="alert ${alertClass}">
+                    <i class="${icon}"></i>
+                    ${message}
+                </div>
+            `;
+        }
+
+        function showUploadMessage(message, type) {
+            const alertClass = `alert-${type}`;
+            const icon = type === 'success' ? 'fas fa-check-circle' : 
+                        type === 'error' ? 'fas fa-exclamation-circle' : 
+                        'fas fa-info-circle';
+            
+            uploadMessage.innerHTML = `
                 <div class="alert ${alertClass}">
                     <i class="${icon}"></i>
                     ${message}
