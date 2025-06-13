@@ -309,20 +309,6 @@
             background-color: #c82333;
         }
 
-        .youtube-preview {
-            margin-top: 0.5rem;
-            padding: 1rem;
-            background-color: var(--background-darker);
-            border-radius: 5px;
-            display: none;
-        }
-
-        .youtube-preview iframe {
-            width: 100%;
-            height: 200px;
-            border-radius: 5px;
-        }
-
         @media screen and (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -336,10 +322,6 @@
                 position: static;
                 margin-bottom: 1rem;
                 align-self: flex-end;
-            }
-
-            .youtube-preview iframe {
-                height: 150px;
             }
         }
 
@@ -380,7 +362,7 @@
                 <i class="fas fa-music"></i>
                 DIUA Music Upload
             </div>
-            <div class="subtitle">Sistema de upload de músicas e videoclipes</div>
+            <div class="subtitle">Sistema de upload de músicas</div>
         </div>
 
         <!-- Authentication Form -->
@@ -465,15 +447,6 @@
                 <div class="form-group">
                     <label class="form-label" for="descricao">Descrição</label>
                     <textarea id="descricao" class="form-textarea" placeholder="Descrição da música (opcional)"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="videoclipe">URL do Videoclipe (YouTube)</label>
-                    <input type="url" id="videoclipe" class="form-input" placeholder="https://www.youtube.com/watch?v=...">
-                    <small style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.25rem; display: block;">
-                        Cole aqui o link do YouTube do videoclipe da música (opcional)
-                    </small>
-                    <div class="youtube-preview" id="youtubePreview"></div>
                 </div>
                 
                 <div class="form-group">
@@ -569,27 +542,10 @@
         const progressFill = document.getElementById('progressFill');
         const submitBtn = document.getElementById('submitBtn');
         const uploadQueue = document.getElementById('uploadQueue');
-        const videoclipeInput = document.getElementById('videoclipe');
-        const youtubePreview = document.getElementById('youtubePreview');
 
         // Global variables
         let isAuthenticated = false;
         let currentUser = null;
-
-        // YouTube helper functions
-        function extractYouTubeVideoId(url) {
-            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-            const match = url.match(regex);
-            return match ? match[1] : null;
-        }
-
-        function createYouTubeEmbed(videoId) {
-            return `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-        }
-
-        function isValidYouTubeUrl(url) {
-            return url.includes('youtube.com') || url.includes('youtu.be');
-        }
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
@@ -636,26 +592,9 @@
             musicForm.addEventListener('submit', handleMusicUpload);
             audioFile.addEventListener('change', handleAudioFileChange);
             imageFile.addEventListener('change', handleImageFileChange);
-            videoclipeInput.addEventListener('input', handleVideoclipeInput);
             
             setupDragAndDrop(audioWrapper, audioFile, 'audio');
             setupDragAndDrop(imageWrapper, imageFile, 'image');
-        }
-
-        function handleVideoclipeInput() {
-            const url = videoclipeInput.value.trim();
-            
-            if (url && isValidYouTubeUrl(url)) {
-                const videoId = extractYouTubeVideoId(url);
-                if (videoId) {
-                    youtubePreview.innerHTML = createYouTubeEmbed(videoId);
-                    youtubePreview.style.display = 'block';
-                } else {
-                    youtubePreview.style.display = 'none';
-                }
-            } else {
-                youtubePreview.style.display = 'none';
-            }
         }
 
         async function handleLogin(e) {
@@ -737,16 +676,9 @@
             const genero = document.getElementById('genero').value;
             const duracao = document.getElementById('duracao').value;
             const descricao = document.getElementById('descricao').value.trim();
-            const videoclipeUrl = document.getElementById('videoclipe').value.trim();
             
             if (!titulo || !artista || !genero || !audioFile.files[0]) {
                 showUploadMessage('Por favor, preencha todos os campos obrigatórios e selecione um arquivo de áudio.', 'error');
-                return;
-            }
-            
-            // Validate YouTube URL if provided
-            if (videoclipeUrl && !isValidYouTubeUrl(videoclipeUrl)) {
-                showUploadMessage('URL do videoclipe deve ser um link válido do YouTube.', 'error');
                 return;
             }
             
@@ -824,7 +756,6 @@
                     descricao: descricao || null,
                     audio_url: audioUrlData.publicUrl,
                     capa_url: imageUrl,
-                    videoclipe_url: videoclipeUrl || null,
                     uploader: currentUser,
                     created_at: new Date().toISOString()
                 };
@@ -953,7 +884,6 @@
             uploadMessage.innerHTML = '';
             progressBar.style.display = 'none';
             progressFill.style.width = '0%';
-            youtubePreview.style.display = 'none';
         }
 
         function showAuthMessage(message, type) {
